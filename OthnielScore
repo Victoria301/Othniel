@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OthnielScore - Sports News and Analysis</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  header, footer { background-color: #333; color: white; padding: 10px 20px; }
+  nav { margin-bottom: 20px; }
+  nav ul { list-style-type: none; padding: 0; }
+  nav ul li { display: inline; margin-right: 10px; }
+  nav ul li a { text-decoration: none; color: white; }
+  .content { margin: 20px; }
+  .news, .stats, .analysis { margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>OthnielScore</h1>
+  <nav>
+    <ul>
+      <li><a href="#news">News</a></li>
+      <li><a href="#statistics">Statistics</a></li>
+      <li><a href="#analysis">Analysis</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="content">
+  <section id="news" class="news">
+    <h2>Latest Sports News</h2>
+    <!-- News articles will go here -->
+  </section>
+
+  <section id="statistics" class="stats">
+    <h2>Sports Statistics</h2>
+    <!-- Statistics data will go here -->
+    <div id="fixtures"></div>
+  </section>
+
+  <section id="analysis" class="analysis">
+    <h2>In-depth Analysis</h2>
+    <!-- Analysis articles will go here -->
+  </section>
+</div>
+
+<footer>
+  <p>© 2024 OthnielScore. All rights reserved.</p>
+</footer>
+
+<script>
+// Replace 'YOUR_API_KEY' with your actual API key
+const apiKey = '6a29a36e92msh0d5814cada996c6p10fd87jsn81d5d9c149a5';
+
+// Specify the date for which you want fixture data
+const date = '2024-06-09'; // Use the format 'YYYY-MM-DD'
+
+// Define the API endpoint URL
+const apiUrl = `https://v3.football.api-sports.io/fixtures?date=${date}`;
+
+// Set up the API request headers with the correct 'x-apisports-key'
+const headers = {
+  'x-apisports-key': apiKey,
+  'Accept': 'application/json',
+};
+
+// Make the API request using the fetch method
+fetch(apiUrl, {
+  method: 'GET',
+  headers: headers
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+})
+.then(apiData => {
+  // Here, 'apiData' contains the fixtures data for the specified date
+  console.log(apiData);
+  // You can now use this data to update your webpage
+  // For example, if you have a <div> with id 'fixtures' where you want to display the fixtures:
+  const fixturesElement = document.getElementById('fixtures');
+  fixturesElement.innerHTML = ''; // Clear existing content
+  apiData.response.forEach(fixture => {
+    // Create a new element for each fixture and add it to the page
+    const fixtureElement = document.createElement('div');
+    fixtureElement.textContent = `${fixture.teams.home.name} vs ${fixture.teams.away.name} - ${fixture.fixture.date}`;
+    fixturesElement.appendChild(fixtureElement);
+  });
+})
+.catch(error => {
+  console.error('There was a problem with the fetch operation:', error);
+});
+</script>
+</body>
+</html>
